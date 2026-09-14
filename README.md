@@ -1,40 +1,30 @@
-# Projet Flutter — App connectée avec backend réel
+# 📱 Projet Flutter — App Connectée avec Backend Réel
 
-Cette application valide la maîtrise des APIs REST, de la Clean Architecture, de la gestion d'état avec BLoC et de la persistance des données pour un mode hors-ligne résilient.
+Cette application démontre une maîtrise complète du développement Flutter moderne en intégrant une **Clean Architecture**, des **APIs REST**, une **Gestion d'état avec BLoC**, et une **Persistance robuste** pour le mode hors-ligne.
 
-## 🚀 Fonctionnalités
-- **Authentification JWT** : Connexion, déconnexion et persistance sécurisée du jeton avec `FlutterSecureStorage` (Backend: DummyJSON API).
-- **Catalogue de Produits (3 Écrans)** :
-  1. Écran de Connexion (Auth)
-  2. Écran de Liste des Produits (REST)
-  3. Écran de Détail du Produit
-- **Mode Hors-ligne & Cache Local** : Mise en cache complète des données avec **Hive**. Si le réseau est indisponible, l'application bascule automatiquement sur les données locales.
-- **Gestion des Erreurs** : Interception et affichage de messages d'erreur clairs en cas de problème réseau ou d'identifiants invalides.
+## 🚀 Fonctionnalités Clés
+- **Authentification Sécurisée** : Connexion via JWT avec gestion automatique du **Refresh Token** via un intercepteur Dio personnalisé. Les tokens sont stockés de manière sécurisée avec `FlutterSecureStorage`.
+- **Catalogue de Produits** : 
+    - Écran de Login.
+    - Écran de Liste des Produits (API DummyJSON).
+    - Écran de Détail Produit complet.
+- **Mode Hors-ligne Résilient** : Mise en cache locale intégrale avec **Hive**. L'application détecte la perte de réseau et bascule automatiquement sur les données locales pour garantir une expérience utilisateur ininterrompue.
+- **Gestion des Erreurs** : Système de gestion des exceptions réseau et métier avec affichage de messages utilisateur clairs.
 
-## 🏗️ Architecture & Exigences Techniques
-- **Clean Architecture** organisée par Feature (`core`, `features/auth`, `features/products`), découpée en couches `data`, `domain` et `presentation`.
-- **Repository Pattern** pour l'unification des sources de données locales et distantes.
-- **Dio Client** avec `AuthInterceptor` pour l'injection automatique du token JWT et `LogInterceptor` pour le débogage.
-- **Tests Unitaires** : Couverture complète de la couche Repository et UseCases (9 tests unitaires validés avec `mocktail`).
-
-## 🔑 Identifiants de Test (DummyJSON)
-- **Username** : `emilys`
-- **Password** : `emilyspass`
+## 🏗️ Architecture & Technologies
+- **Clean Architecture (Feature-First)** : Séparation stricte des couches `Data`, `Domain` et `Presentation` au sein de chaque feature (`auth`, `products`).
+- **Repository Pattern** : Unification des sources de données distantes et locales.
+- **Dio Client** : Intercepteurs pour l'injection du token, le rafraîchissement automatique (Refresh Token) et les logs.
+- **Bloc Pattern** : Gestion de l'état prévisible et réactive.
+- **Tests Unitaires** : Couverture des couches Repository et Domain (UseCases).
+- **CI/CD** : Pipeline GitHub Actions intégré pour l'analyse du code et l'exécution automatique des tests.
 
 ## 🛠️ Installation & Démarrage
-1. Récupérer les dépendances :
-   ```bash
-   flutter pub get
-   ```
-2. Générer les adaptateurs Hive :
-   ```bash
-   flutter pub run build_runner build --delete-conflicting-outputs
-   ```
-3. Lancer les tests unitaires :
-   ```bash
-   flutter test
-   ```
-4. Exécuter l'application :
-   ```bash
-   flutter run
-   ```
+1. **Dépendances** : `flutter pub get`
+2. **Génération de code (Hive)** : `flutter pub run build_runner build --delete-conflicting-outputs`
+3. **Tests** : `flutter test`
+4. **Exécution** : `flutter run`
+
+## 🔑 Identifiants de Test
+- **Username** : `emilys`
+- **Password** : `emilyspass`

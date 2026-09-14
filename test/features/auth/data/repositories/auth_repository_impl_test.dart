@@ -31,6 +31,7 @@ void main() {
     firstName: 'Test',
     lastName: 'User',
     token: 'jwt_token_123',
+    refreshToken: 'refresh_token_123',
   );
 
   group('login', () {
@@ -39,12 +40,18 @@ void main() {
 
     test('should return remote data and cache token when call to remote data source is successful', () async {
       when(() => mockRemoteDataSource.login(any(), any())).thenAnswer((_) async => tUserModel);
-      when(() => mockLocalDataSource.cacheToken(any())).thenAnswer((_) async => {});
+      when(() => mockLocalDataSource.cacheTokens(
+            token: any(named: 'token'),
+            refreshToken: any(named: 'refreshToken'),
+          )).thenAnswer((_) async => {});
 
       final result = await repository.login(tUsername, tPassword);
 
       verify(() => mockRemoteDataSource.login(tUsername, tPassword));
-      verify(() => mockLocalDataSource.cacheToken(tUserModel.token));
+      verify(() => mockLocalDataSource.cacheTokens(
+            token: tUserModel.token,
+            refreshToken: tUserModel.refreshToken,
+          ));
       expect(result, equals(const Right(tUserModel)));
     });
 

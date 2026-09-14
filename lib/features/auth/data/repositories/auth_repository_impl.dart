@@ -18,10 +18,13 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, User>> login(String username, String password) async {
     try {
       final userModel = await remoteDataSource.login(username, password);
-      await localDataSource.cacheToken(userModel.token);
+      await localDataSource.cacheTokens(
+        token: userModel.token,
+        refreshToken: userModel.refreshToken,
+      );
       return Right<Failure, User>(userModel);
     } catch (e) {
-      final message = e is Exception ? e.toString().replaceAll('Exception: ', '') : e.toString();
+      final message = e.toString().replaceAll('Exception: ', '');
       return Left(ServerFailure(message));
     }
   }
@@ -29,7 +32,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, void>> logout() async {
     try {
-      await localDataSource.clearToken();
+      await localDataSource.clearAll();
       return const Right<Failure, void>(null);
     } catch (e) {
       return Left(CacheFailure(e.toString()));

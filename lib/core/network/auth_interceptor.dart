@@ -19,8 +19,32 @@ class AuthInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401) {
-      // Handle refresh token here if applicable
-      // For this demo, we might just logout or try a refresh
+      final refreshToken = await storage.read(key: 'refresh_token');
+      if (refreshToken != null) {
+        try {
+          // Attempt to refresh token
+          final response = await dio.post('https://dummyjson.com/auth/refresh', data: {
+            'refreshToken': refreshToken,
+            'expiresInMins': 30,
+          });
+
+          if (response.statusCode == 200) {
+            final newToken = response.data['token'];
+            final newRefreshToken = response.data['refreshToken'];
+            
+            await storage.write(key: 'jwt_token', value: newToken);
+            await storage.write(key: 'refresh_token', value: newRefreshToken);
+
+            // Retry original request
+            err.requestOptions.headers['Authorization'] = 'Bearer $newToken';
+            final cloneReq = await dio.fetch(err.requestOptions);
+            return handler.resolve(cloneReq);
+          }
+        } catch (e) {
+          // If refresh fails, logout
+          await storage.deleteAll();
+        }
+      }
     }
     return handler.next(err);
   }

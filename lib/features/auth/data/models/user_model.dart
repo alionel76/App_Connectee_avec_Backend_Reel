@@ -8,6 +8,7 @@ class UserModel extends User {
     required super.firstName,
     required super.lastName,
     required super.token,
+    super.refreshToken,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -18,6 +19,7 @@ class UserModel extends User {
       firstName: json['firstName'] as String? ?? '',
       lastName: json['lastName'] as String? ?? '',
       token: json['token'] as String? ?? '',
+      refreshToken: json['refreshToken'] as String?,
     );
   }
 
@@ -29,6 +31,10 @@ class UserModel extends User {
       'firstName': firstName,
       'lastName': lastName,
       'token': token,
+      'refreshToken': refreshToken,
     };
   }
+
+  @override
+  List<Object?> get props => [id, username, email, firstName, lastName, token, refreshToken];
 }
